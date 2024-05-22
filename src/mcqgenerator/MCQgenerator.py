@@ -15,7 +15,7 @@ from langchain.chains import SequentialChain
 load_dotenv()
 
 key = os.getenv("OPENAI_API_KEY")
-
+print('key ==>', key)
 llm = ChatOpenAI(openai_api_key = key, model_name = 'gpt-3.5-turbo', temperature=0.3)
 
 TEMPLATE = '''
@@ -44,14 +44,14 @@ quiz_generation_prompt = PromptTemplate(
     template=TEMPLATE
 )
 
-quiz_chain = LLMChain(llm = llm, prompts = quiz_generation_prompt, output_key = "quiz", verbose = True)
+quiz_chain = LLMChain(llm = llm, prompt = quiz_generation_prompt, output_key = "quiz", verbose = True)
 
 quiz_evaluation_prompt = PromptTemplate(
     input_variables=['subject', 'quiz'],
     template=TEMPLATE2
 )
 
-review_chain = LLMChain(llm = llm,prompts = quiz_evaluation_prompt, output_key = 'review', verbose = True)
+review_chain = LLMChain(llm = llm,prompt = quiz_evaluation_prompt, output_key = 'review', verbose = True)
 
 generate_evaluate_chain = SequentialChain(
     chains=[quiz_chain, review_chain],

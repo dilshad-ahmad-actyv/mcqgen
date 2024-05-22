@@ -58,3 +58,28 @@ with st.form("User Inputs"):
                             "response_json": json.dumps(RESPONSE_JSON)
                         }
                     )
+            except Exception as e:
+                traceback.print_exception(type(e), e, e.__traceback__)
+                st.error("Error")
+            
+            else:
+                print(f"Total tokens: {cb.total_tokens}")
+                print(f"Prompt tokens: {cb.prompt_tokens}")
+                print(f"Completion tokens: {cb.completion_tokens}")
+                print(f"Total cost: {cb.total_cost}")
+
+                if isinstance(response, dict):
+                    #Extract the quiz data from the response
+                    quiz = response.get("quiz", None)
+                    if quiz is not None:
+                        table_data = get_table_data(quiz)
+                        if table_data is not None:
+                            df = pd.DataFrame(table_data)
+                            df.index = df.index + 1
+                            st.table(df)
+                            # Display review in a text box as well
+                            st.text_area(label="Review", value=response["review"])
+                        else:
+                            st.error("Error in the table data")
+                else:
+                    st.write(response)
