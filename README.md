@@ -1,1 +1,1 @@
-# MCQ Generator
+# MCQ Generator App
